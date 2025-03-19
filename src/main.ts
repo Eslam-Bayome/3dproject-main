@@ -23,17 +23,21 @@ const sizes = {
 };
 
 const colorTexture = textureLoader.load("/static/textures/door/color.jpg");
-const alphaTexture = textureLoader.load("/static/textures/door/alpha.jpg");
-const heightTexture = textureLoader.load("/static/textures/door/height.jpg");
-const metalnessTexture = textureLoader.load(
-  "/static/textures/door/metalness.jpg"
-);
-const normalTexture = textureLoader.load(
-  "/static/textures/door/normalTexture.jpg"
-);
-const ambientOcclusionTexture = textureLoader.load(
-  "/static/textures/door/ambientOcclusion.jpg"
-);
+colorTexture.repeat.set(2, 3);
+colorTexture.wrapS = Three.RepeatWrapping;
+colorTexture.wrapT = Three.RepeatWrapping;
+colorTexture.rotation = Math.PI * 1;
+// const alphaTexture = textureLoader.load("/static/textures/door/alpha.jpg");
+// const heightTexture = textureLoader.load("/static/textures/door/height.jpg");
+// const metalnessTexture = textureLoader.load(
+//   "/static/textures/door/metalness.jpg"
+// );
+// const normalTexture = textureLoader.load(
+//   "/static/textures/door/normalTexture.jpg"
+// );
+// const ambientOcclusionTexture = textureLoader.load(
+//   "/static/textures/door/ambientOcclusion.jpg"
+// );
 
 const geometry = new Three.BoxGeometry(1, 1, 1, 4, 4, 4);
 // const positionsArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);

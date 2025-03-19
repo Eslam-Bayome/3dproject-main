@@ -1,0 +1,9 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+#btn {
+  background-color: aqua;
+  padding: 10px;
+  text-align: center;
+}

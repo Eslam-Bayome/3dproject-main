@@ -22,11 +22,14 @@ const sizes = {
   height: window.innerHeight,
 };
 
-const colorTexture = textureLoader.load("/static/textures/door/color.jpg");
-colorTexture.repeat.set(2, 3);
-colorTexture.wrapS = Three.RepeatWrapping;
-colorTexture.wrapT = Three.RepeatWrapping;
-colorTexture.rotation = Math.PI * 1;
+const colorTexture = textureLoader.load("/static/textures/minecraft.png");
+// colorTexture.repeat.set(2, 3);
+// colorTexture.wrapS = Three.RepeatWrapping;
+// colorTexture.wrapT = Three.RepeatWrapping;
+colorTexture.rotation = Math.PI * 0.25;
+colorTexture.center.set(0.5, 0.5);
+colorTexture.magFilter = Three.NearestFilter;
+// colorTexture.minFilter = Three.NearestFilter;
 // const alphaTexture = textureLoader.load("/static/textures/door/alpha.jpg");
 // const heightTexture = textureLoader.load("/static/textures/door/height.jpg");
 // const metalnessTexture = textureLoader.load(

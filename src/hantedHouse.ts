@@ -2,6 +2,7 @@ import * as Three from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Timer } from "three/addons/misc/Timer.js";
 import GUI from "lil-gui";
+import { Sky } from "three/addons/objects/Sky.js";
 
 /**
  * Base
@@ -241,7 +242,7 @@ walls.position.y += wallHeight / 2;
 house.add(walls);
 const roofHeight = 1.5;
 const roof = new Three.Mesh(
-  new Three.ConeGeometry(3, roofHeight, 4),
+  new Three.ConeGeometry(4, roofHeight, 4),
   new Three.MeshStandardMaterial({
     map: roofColorTexture,
     aoMap: roofArmTexture,
@@ -362,6 +363,23 @@ const ghost2 = new Three.PointLight("#ff0088", 6);
 const ghost3 = new Three.PointLight("#ff0000", 6);
 scene.add(ghost1, ghost2, ghost3);
 //! ==========================================================================================
+//? sky
+
+const sky = new Sky();
+scene.add(sky);
+sky.scale.setScalar(200);
+sky.material.uniforms["turbidity"].value = 10;
+sky.material.uniforms["rayleigh"].value = 3;
+sky.material.uniforms["mieCoefficient"].value = 0.1;
+sky.material.uniforms["mieDirectionalG"].value = 0.95;
+sky.material.uniforms["sunPosition"].value.set(0.3, -0.038, -0.95);
+//! ==========================================================================================
+
+//? fog
+
+// scene.fog = new Three.Fog("#262837", 4, 15);
+scene.fog = new Three.FogExp2("#02343f", 0.08);
+//! =========================================================================================
 
 /**
  * Renderer
@@ -371,6 +389,52 @@ const renderer = new Three.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+//! ==========================================================================================
+//? Shadows
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = Three.PCFSoftShadowMap;
+directionalLight.castShadow = true;
+ghost1.castShadow = true;
+ghost2.castShadow = true;
+ghost3.castShadow = true;
+
+walls.castShadow = true;
+walls.receiveShadow = true;
+
+roof.castShadow = true;
+roof.receiveShadow = true;
+
+floor.receiveShadow = true;
+
+graveGroups.children.forEach((grave) => {
+  grave.receiveShadow = true;
+  grave.castShadow = true;
+});
+
+//? mapping the shadows
+directionalLight.shadow.mapSize.width = 256;
+directionalLight.shadow.mapSize.height = 256;
+directionalLight.shadow.camera.near = 1;
+directionalLight.shadow.camera.far = 20; //  default is 500
+directionalLight.shadow.camera.left = -8;
+directionalLight.shadow.camera.right = 8;
+directionalLight.shadow.camera.top = 8;
+directionalLight.shadow.camera.bottom = -8;
+
+ghost1.shadow.mapSize.width = 256;
+ghost1.shadow.mapSize.height = 256;
+ghost1.shadow.camera.near = 1;
+ghost1.shadow.camera.far = 10;
+
+ghost2.shadow.mapSize.width = 256;
+ghost2.shadow.mapSize.height = 256;
+ghost2.shadow.camera.near = 1;
+ghost2.shadow.camera.far = 10;
+
+ghost3.shadow.mapSize.width = 256;
+ghost3.shadow.mapSize.height = 256;
+ghost3.shadow.camera.near = 1;
+ghost3.shadow.camera.far = 10;
 //! ==========================================================================================
 
 /**

@@ -69,17 +69,46 @@ const scene = new THREE.Scene();
 //! ==========================================================================================
 
 //? Ground projected Skybox
+// const skyParams = {
+//   height: 15,
+//   radius: 90,
+//   resolution: 1024,
+// };
+// rgbeLoader.load("/static/environmentMap/0/2k.hdr", (environmentTexture) => {
+//   environmentTexture.mapping = THREE.EquirectangularReflectionMapping;
+//   const groundedSkybox = new GroundedSkybox(
+//     environmentTexture,
+//     skyParams.height,
+//     skyParams.radius,
+//     skyParams.resolution
+//   );
+//   groundedSkybox.position.y = skyParams.height - 0.001;
+//   scene.add(groundedSkybox);
+//   scene.backgroundIntensity = 1;
+//   // groundedSkybox.material.color.setScalar(5);
+//   // groundedSkybox.scale.setScalar(10);
+//   scene.environment = environmentTexture;
+//   scene.background = environmentTexture;
+// });
 
-rgbeLoader.load("/static/environmentMap/0/2k.hdr", (environmentTexture) => {
-  environmentTexture.mapping = THREE.EquirectangularReflectionMapping;
-  const groundedSkybox = new GroundedSkybox(environmentTexture, 15, 90, 1024);
-  groundedSkybox.position.y = 15;
-  scene.add(groundedSkybox);
-  scene.backgroundIntensity = 1;
-  groundedSkybox.material.color.setScalar(50);
-  scene.environment = environmentTexture;
-  // scene.background = environmentTexture;
+//? Real Time Enviroment Map
+const holyDount = new THREE.Mesh(
+  new THREE.TorusGeometry(8, 0.5),
+  new THREE.MeshBasicMaterial({
+    color: "#fff",
+  })
+);
+const enviromentMap = rgbeLoader.load("/static/environmentMap/0/2k.hdr", () => {
+  enviromentMap.mapping = THREE.EquirectangularReflectionMapping;
+  enviromentMap.colorSpace = THREE.LinearSRGBColorSpace;
+
+  scene.background = enviromentMap;
+
+  holyDount.position.y = 3.5;
+
+  scene.add(holyDount);
 });
+
 //! ==========================================================================================
 
 /**
@@ -149,6 +178,8 @@ scene.add(camera);
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.target.y = 3.5;
+controls.maxDistance = 80;
+
 controls.enableDamping = true;
 //! ==========================================================================================
 
@@ -171,6 +202,7 @@ const tick = () => {
   // Time
   const elapsedTime = clock.getElapsedTime();
 
+  holyDount.rotation.x = elapsedTime;
   // Update controls
   controls.update();
 
